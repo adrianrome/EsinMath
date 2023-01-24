@@ -1,0 +1,167 @@
+// En la classe "expressio" s'han declarat dos variables i trenta-una funcions privades
+// Les variables privades es fan servir per emmagatzemar un arbre d'expressió. Donat que es vol emmagatzemar una expressió en forma d'arbre, s'ha escollit un arbre binari on les funcions i els operadors unaris tenen el fill esquerre buit, perquè un arbre binari és una estructura de dades jeràrquica que representa una expressió aritmètica de forma natural i ordenada, a més, permet representar fàcilment les operacions aritmètiques.
+// Les funcions privades es fan servir per optimitzar el codi i aplicar solucions recursives.
+
+struct node
+{
+    node *f_esq;  // punter al fill esquerre.
+    node *f_dret; // punter al fill dret.
+    token info;   // token.
+    node(token i) : f_esq(nullptr), f_dret(nullptr), info(i) {}
+};            // node de l'arbre d'expressió.
+node *_arrel; // arrel de l'arbre d'expressió.
+
+// Retorna si un token és una constant.
+// PRE: "t" és un token vàlid.
+// POST: retorna "true" si "t" és un token de tipus constant, en cas contrari, retorna "false".
+static bool es_constant(const token &t);
+
+// Retorna si un token és un operand.
+// PRE: "t" és un token vàlid.
+// POST: retorna "true" si "t" és un token de tipus operand, en cas contrari, retorna "false".
+static bool es_operand(const token &t);
+
+// Retorna si un token és un operador binari.
+// PRE: "t" és un token vàlid.
+// POST: retorna "true" si "t" és un token de tipus operador binari, en cas contrari, retorna "false".
+static bool es_operador_binari(const token &t);
+
+// Retorna si un token és un operador unari.
+// PRE: "t" és un token vàlid.
+// POST: retorna "true" si "t" és un token de tipus unari, en cas contrari, retorna "false".
+static bool es_operador_unari(const token &t);
+
+// Retorna si un token és un operador.
+// PRE: "t" és un token vàlid.
+// POST: retorna "true" si "t" és un token de tipus operador, en cas contrari, retorna "false".
+static bool es_operador(const token &t);
+
+// Retorna si un token és una funció.
+// PRE: "t" és un token vàlid.
+// POST: retorna "true" si "t" és un token de tipus funció, en cas contrari, retorna "false".
+static bool es_funcio(const token &t);
+
+// Retorna la precedència d'un token.
+// PRE: "t" és un token vàlid.
+// POST: retorna un "int" segons la precedència del codi de l'operador del token "t".
+static int obtenir_precedencia(const token &t);
+
+// Comprova si dos tokens tenen la mateixa prioritat.
+// PRE: "t1" i "t2" són tokens vàlids.
+// POST: retorna "true" si "t1" i "t2" són tokens amb la mateixa prioritat, en cas contrari, retorna "false".
+static bool prioritat_igual(const token &t1, const token &t2);
+
+// Comprova si un const token &té associativitat esquerra dreta.
+// PRE: "t" és un token vàlid.
+// POST: retorna "true" si és un token operador amb associativitat esquerra dreta, en cas contrari, retorna "false".
+static bool associativitat_ed(const token &t);
+
+// Recorre un arbre binari emmagatzemant en una llista l'arbre d'expressió.
+// PRE: "n" és un node vàlid, "lt" és una llista de tokens vàlida i "pila" és una llista de tokens vàlida.
+// POST: "pila" conté la representació de l'expressió en notació infixa.
+static void recorrer_arbre(node *n, list<token> &lt, list<token> &p);
+
+// Copia un arbre binari.
+// PRE: "n" és un "node" vàlid.
+// POST: retorna un "node" amb el mateix contingut que "n".
+static node *copiar_arbre(node *n);
+
+// Esborra un arbre binari.
+// PRE: "n" és un node vàlid.
+// POST: allibera la memòria d'un "node".
+static void esborra_arbre(node *n);
+
+// Comprova si dos arbres binaris són iguals.
+// PRE: "n1" i "n2" són "node"s vàlids.
+// POST: retorna "true" si "n1" i "n2" són iguals, en cas contrari, retorna "false".
+static bool arbres_iguals(node *n1, node *n2);
+
+// Recorre un arbre binari emmagatzemant en una llista les seves variables.
+// PRE: "n" és un "node" vàlid i l és una llista de strings vàlida.
+// POST: "l" conté les variables d'una expressió.
+static void troba_vars(node *n, list<string> &l);
+
+// Substitueix totes les ocurrències d'una variable en un arbre per una expressió.
+// PRE: "n" és un "node" vàlid, "v" és una string vàlida i "e" és una expressió vàlida.
+// POST: si "n" era igual a "v", ara "n" és igual a "e".
+static void variable_substitutiva(node *&n, const string &v, const expressio &e);
+
+// Retorna si un token conté un nombre negatiu.
+// PRE: "t" és un token vàlid.
+// POST: retorna "true" si "t" és un token constant negatiu, en cas contrari, retorna "false".
+static bool es_negatiu(const token &t);
+
+// Modifica l'arbre binari fent només la primera simplificació possible.
+// PRE: "n" és un "node" vàlid i "simplificat" és un booleà vàlid.
+// POST: si "n" es pot simplificar, se simplifica i "simplificat" té el valor de "true", en cas contrari, no se simplifica i "simplificat" té el valor de "false".
+static void simplifica_parcial(node *n, bool &simplificat);
+
+// Modifica l'arbre binari fent totes les simplificacions possibles.
+// PRE: "n" és un "node" vàlid i "hi_ha_canvis" és un booleà vàlid.
+// POST: si "n" es pot simplificar, se simplifica i "hi_ha_canvis" té el valor de "true", en cas contrari, no se simplifica i "hi_ha_canvis" té el valor de "false".
+static void simplifica_total(node *n, bool &hi_ha_canvis);
+
+// Comprova si es pot fer un càlcul d'exponenciació en un arbre binari donat.
+// PRE: "n" és un "node" vàlid.
+// POST: retorna "true" si es pot fer el càlcul d'exponenciació directe, en cas contrari, retorna "false".
+static bool es_calcul_exponenciacio(node *n);
+
+// Intenta simplificar una expressió que conté un racional a enter i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_racional(node *n);
+
+// Converteix un enter en un racional si l'altre operand és racional.
+// PRE: "n" és un "node" vàlid.
+// POST: si una constant és entera i l'altre racional a "n", l'entera en converteix en racional.
+static void enter_i_racional(node *n);
+
+// Intenta simplificar una expressió fent càlculs bàsics i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool calcula(node *n);
+
+// Intenta simplificar una expressió que conté una suma i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_suma(node *n);
+
+// Intenta simplificar una expressió que conté una resta i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_resta(node *n);
+
+// Intenta simplificar una expressió que conté un canvi de signe o un signe positiu i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_canvi_de_signe(node *n);
+
+// Intenta simplificar una expressió que conté una multiplicació i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_multiplicacio(node *n);
+
+// Intenta simplificar una expressió que conté una divisió i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_divisio(node *n);
+
+// Intenta simplificar una expressió que conté una exponenciació i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_exponenciacio(node *n);
+
+// Intenta simplificar una expressió que conté una radicació i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_radicacio(node *n);
+
+// Intenta simplificar una expressió que conté un exponencial o logaritme i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_exponencial_i_logaritme(node *n);
+
+// Intenta simplificar una expressió que conté un evalf i retorna si ho ha pogut fer.
+// PRE: "n" és un "node" vàlid.
+// POST: si a "n" se li ha pogut aplicar una regla de simplificació, s'efectua i retorna "true", en cas contrari, no fa res i retorna "false".
+static bool simplifica_evalf(node *n);

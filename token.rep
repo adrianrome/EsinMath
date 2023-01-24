@@ -1,0 +1,41 @@
+// En la classe "token" s'han declarat cinc variables i tres funcions privades
+// Les variables privades es fan servir per emmagatzemar el tipus de token i, si escau, el seu valor. Donat que el valor només pot ser d'un tipus i no pot ser de cap altre més s'ha optat per utilitzar un union perquè permet emmagatzemar diversos tipus de dades al mateix bloc de memòria, no es necessita més espai d'emmagatzematge del necessari per emmagatzemar el tipus de dades més gran que s'emmagatzemarà al union, a més, en utilitzar un union en lloc d'un struct, es pot estalviar temps d'execució en accedir directament a les dades en lloc d'haver-hi d'accedir a través d'un punter o una referència.
+// Les funcions privades optimitzen el codi.
+
+codi _codi; // tipus de token.
+
+union Valor
+{
+    int i;      // constant entera.
+    racional r; // constant racional.
+    double d;   // constant real.
+    string *s;  // variable.
+
+    Valor() : s(nullptr) {}
+    ~Valor() {}
+} _valor;
+
+// Retorna si un tipus de token és operand.
+// PRE: "c" és un codi vàlid.
+// POST: retorna "true" si "c" és un codi d'un token de tipus operand, en cas contrari, retorna "false".
+static bool es_operand(const codi &c);
+
+// Retorna si un tipus de token és operador.
+// PRE: "c" és un codi vàlid.
+// POST: retorna "true" si "c" és un codi d'un token de tipus operador, en cas contrari, retorna "false".
+static bool es_operador(const codi &c);
+
+// Retorna la precedència d'un tipus de token.
+// PRE: "c" és un codi vàlid.
+// POST: retorna un "int" segons la precedència del codi de l'operador "c".
+static int obtenir_precedencia(const codi &c);
+
+// Retorna si és una paraula és reservada.
+// PRE: "s" és una string vàlida.
+// POST: retorna "true" si "s" és una paraula reservada, en cas contrari, retorna "false".
+static bool es_paraula_reservada(const string &s);
+
+// Retorna si és un caràcter vàlid pel nom de la variable.
+// PRE: "c" és un caràcter vàlid.
+// POST: retorna "true" si "c" és un caràcter vàlid pel nombre d'una variable, en cas contrari, retorna "false".
+static bool es_caracter_valid(const char &c);

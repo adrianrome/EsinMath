@@ -1,0 +1,70 @@
+// En la classe "variables" s'han declarat dos variables i onze funcions privades
+// Les variables privades es fan servir per emmagatzemar un arbre de variables, s'ha escollit la representació d'un AVL per a les variables perquè el constructor per còpia, assignació i destructor tenen cost O(n), i la resta, exceptuant dump, tenen cost O(log(N)). Un BST ens podria sortir degenerat i en el pitjor dels casos tenir un temps de cerca O(N), una taula de dispersió requeriria constantment comprovar el factor de càrrega fent redispersió i un trie en el pitjor cas de cerca tindria un cost O(n).
+// Les funcions privades es fan servir per optimitzar el codi i aplicar solucions recursives.
+
+struct node
+{
+    string _k;            // clau.
+    expressio _v;         // valor.
+    node *_esq;           // punter al fill esquerre.
+    node *_dret;          // punter al fill dret.
+    unsigned int _altura; // altura.
+    // Constructora que crea un node per a un arbre binari de cerca equilibrat.
+    node(const string &k, const expressio &v, const int &altura = 1, node *esq = nullptr, node *dret = nullptr);
+};            // node de l'arbre de variables.
+node *_arrel; // arrel de l'arbre de variables.
+
+// Calcula l'altura d'un node d'un arbre binari de cerca equilibrat.
+// PRE: "n" és un "node" vàlid.
+// POST: retorna un enter amb l'altura del "node" "n" en l'arbre respecte a l'arrel.
+static int altura(node *n);
+
+// Calcula el factor d'equilibri d'un node d'un arbre binari equilibrat.
+// PRE: "n" és un "node" vàlid.
+// POST: retorna un enter amb la diferència d'altura dels fills del "node" "n".
+static int factor_equilibri(node *n);
+
+// Realitza una rotació dreta en un arbre binari de cerca equilibrat, a partir del node "y".
+// PRE: "y" és un "node" vàlid.
+// POST: retorna un "node" fent una rotació a la dreta respecte a "y".
+static node *rotacio_dreta(node *y);
+
+// Realitza una rotació esquerra en un arbre binari de cerca equilibrat, a partir del node "x".
+// PRE: "x" és un "node" vàlid.
+// POST: retorna un "node" fent una rotació a l'esquerra respecte a "x".
+static node *rotacio_esquerra(node *x);
+
+// Afegeix una parella clau-valor a un arbre binari de cerca equilibrat.
+// PRE: "n" és un "node" vàlid, "k" és una string vàlida i "v" és una expressió vàlida.
+// POST: retorna un "node" on s'ha afegit el nou parell clau-valor, o si ja existia, s'ha actualitzat.
+static node *insereix_avl(node *n, const string &k, const expressio &v);
+
+// Troba el node amb la clau més petita d'un arbre binari de cerca equilibrat.
+// PRE: "n" és un "node" vàlid.
+// POST: retorna un "node" que conté el valor més petit de l'arbre.
+static node *node_valor_minim(node *n);
+
+// Elimina un node d'un arbre binari de cerca equilibrat.
+// PRE: "n" és un "node" vàlid, "k" és una string vàlida.
+// POST: retorna un "node" on s'ha eliminat el parell clau-valor amb clau "k" si hi era.
+static node *elimina_avl(node *n, const string &k);
+
+// Cerca una clau dins d'un arbre binari de cerca equilibrat.
+// PRE: "n" és un "node" vàlid.
+// POST: retorna un "node" que té la clau "k" del parell clau-valor.
+static node *consulta_avl(node *n, const string &k);
+
+// Recorre un arbre binari de cerca equilibrat inordre per afegir les claus dels nodes a una llista.
+// PRE: "n" és un "node" vàlid.
+// POST: "lt" conté les claus del node "n".
+static void recorrer_arbre(node *n, list<string> &lt);
+
+// Copia un arbre binari de cerca equilibrat donat a un altre arbre.
+// PRE: "n" és un "node" vàlid.
+// POST: retorna un "node" amb el mateix contingut que "n".
+static node *copiar_arbre(node *n);
+
+// Esborra tots els nodes d'un arbre binari de cerca.
+// PRE: "n" és un "node" vàlid.
+// POST: allibera la memòria d'un "node".
+static void esborra_arbre(node *n);

@@ -1,0 +1,12 @@
+// En la classe "racional" s'han declarat dos variables i dues funcions privades.
+// Les variables privades es fan servir per emmagatzemar el numerador i el denominador de la fracció, escollint-se dos variables de tipus enter perquè és un tipus de dades bàsic i natiu de C++, és un tipus de dades de mida fixa i té un rendiment predictible.
+// Les funcions privades permeten simplificar la fracció al màxim.
+
+int _n; // numerador.
+int _d; // denominador.
+
+// Calcula el màxim comú divisor (MCD) de dos nombres enters.
+static int mcd(int a, int b);
+
+// Calcula el mínim comú múltiple (MCM) de dos nombres enters.
+static int mcm(int a, int b);

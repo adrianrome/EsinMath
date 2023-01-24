@@ -1,0 +1,16 @@
+// En la classe "math_sessio" s'han declarat dos variables i dues funcions privades
+// Les variables privades es fan servir per emmagatzemar les variables declarades i per determinar si s'ha acabat la sessió.
+// La funció analisi_comanda es fa servir per determinar si es tracta d'una comanda vàlida o no, mentre que la funció es_segon_token es fa servir per comprovar si el segon token d'una llista de tokens és d'un determinat tipus.
+
+variables _vars; // variable que emmagatzema les variables declarades de la sessió.
+bool _bybye;     // variable que emmagatzema si ha finalitzat la sessió.
+
+// Analitza una llista de tokens per determinar si es tracta d'una comanda vàlida o no.
+// PRE: "lin" és una llista de tokens vàlida.
+// POST: llença l'error "La sintaxi de la comanda és incorrecta" si la comanda "lin" no té una sintaxi correcta.
+static void analisi_comanda(const list<token> &lin);
+
+// Comprova si el segon token d'una llista de tokens és d'un determinat tipus.
+// PRE: "lin" és una llista de tokens vàlida i "c" és un codi de token vàlid.
+// POST: retorna "true" si el segon token de la llista "lin" té el codi "c", en cas contrari, retorna false.
+static bool es_segon_token(const list<token> &lin, const token::codi &c);
